@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function PUT(request, { params }) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const { status } = await request.json();
 
     const result = await pool.query(
@@ -24,7 +24,7 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
-    const id = params.id;
+    const { id } = await params;
 
     const result = await pool.query(
       'DELETE FROM tasks WHERE id = $1 RETURNING *',

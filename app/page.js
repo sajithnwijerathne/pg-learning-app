@@ -35,6 +35,8 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description }),
       });
+      if (!response.ok) throw new Error('Failed to create task');
+      
       const newTask = await response.json();
       setTasks([newTask, ...tasks]);
       setTitle('');
@@ -51,6 +53,8 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
+      if (!response.ok) throw new Error('Failed to update task');
+      
       const updatedTask = await response.json();
       setTasks(tasks.map((task) => (task.id === id ? updatedTask : task)));
     } catch (error) {
@@ -60,7 +64,9 @@ export default function Home() {
 
   const deleteTask = async (id) => {
     try {
-      await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed to delete task');
+      
       setTasks(tasks.filter((task) => task.id !== id));
     } catch (error) {
       console.error('Failed to delete task:', error);
